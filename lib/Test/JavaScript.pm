@@ -38,8 +38,9 @@ my $js = JavaScript::SpiderMonkey->new();
 $js->init();
 $js->eval("var test_js = new Object;");
 
-our @ISA    = qw(Exporter);
-our @EXPORT = qw(ok use_ok is isnt);
+our $VERSION = 0.03;
+our @ISA     = qw(Exporter);
+our @EXPORT  = qw(ok use_ok is isnt);
 
 $js->function_set("ok", sub { $Test->ok(@_) });
 $js->function_set("is", sub { $Test->is_eq(@_) });

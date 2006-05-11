@@ -8,7 +8,7 @@ use ExtUtils::MakeMaker;
 
 WriteMakefile(
     NAME	 => 'Test-JavaScript',
-    VERSION      => '0.02',
+    VERSION_FROM => 'lib/Test/JavaScript.pm',
     AUTHOR	 => 'Kevin Jones',
     ABSTRACT	 => 'JavaScript unit testing',
     PREREQ_PM    => {
