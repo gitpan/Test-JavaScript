@@ -31,27 +31,19 @@ use Exporter;
 use Carp qw(croak);
 
 use Test::Builder;
-my $Test = Test::Builder->new;
+our $Test = Test::Builder->new;
 
 use JavaScript::SpiderMonkey;
-my $js = JavaScript::SpiderMonkey->new();
+our $js = JavaScript::SpiderMonkey->new();
 $js->init();
-$js->eval("var test_js = new Object;");
-
-our $VERSION = 0.03;
-our @ISA     = qw(Exporter);
-our @EXPORT  = qw(ok use_ok is isnt);
-
-$js->function_set("ok", sub { $Test->ok(@_) });
-$js->function_set("is", sub { $Test->is_eq(@_) });
-$js->function_set("isnt", sub { $Test->isnt_eq(@_) });
-$js->function_set("warn", sub { warn @_ });
-
-return 1;
-
 END { $js->destroy };
 
+our $VERSION = 0.04;
+our @ISA     = qw(Exporter);
+our @EXPORT  = qw(ok use_ok is isnt plan diag);
+
 sub no_ending { $Test->no_ending(@_) }
+sub plan { $Test->plan(@_) }
 
 sub import {
     my $self = shift;
@@ -142,6 +134,8 @@ For example:
 
 =cut
 
+$js->function_set("is", sub { $Test->is_eq(@_) });
+
 sub is {
     my ($test,$actual,$ename,$name) = escape_args(@_);
     my $code = <<EOT;
@@ -149,6 +143,8 @@ is( $test, '$actual', '$ename'.replace(/\\'/,"'"));
 EOT
     try_eval($code, $name);
 }
+
+$js->function_set("isnt", sub { $Test->isnt_eq(@_) });
 
 sub isnt {
     my ($test,$actual,$ename,$name) = escape_args(@_);
@@ -176,6 +172,7 @@ For example:
 
 =cut
 
+$js->function_set("ok", sub { $Test->ok(@_) });
 sub ok {
     my ($test,$ename,$name) = escape_args(@_);
     my $lines = join"\n", map { "code.push('$_');" } split("\n", $test);
@@ -189,3 +186,16 @@ EOT
     try_eval($code, $name);
 }
 
+=item B<diag>
+
+  ok("diag('this is a warning from javascript')");
+  diag('this is a warning from perl');
+
+This subroutine simply logs the parameters passed as a comment
+
+=cut
+
+$js->function_set("diag", sub { $Test->diag(@_) });
+sub diag { $Test->diag(@_) }
+
+return 1;

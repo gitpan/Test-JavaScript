@@ -1,12 +1,11 @@
 lib/Test/JavaScript.pm
 Makefile.PL
 MANIFEST			This list of files
-README
+t/diag.t
 t/fail.t
 t/lib/Test/Simple/Catch.pm
 t/lib/TieOut.pm
 t/no_plan.t
 t/plan.t
 t/samp_validator.t
-Test-JavaScript-0.03.tar.gz
 META.yml                                 Module meta-data (added by MakeMaker)
