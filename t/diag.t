@@ -8,15 +8,14 @@ require Test::Simple::Catch;
 my($out, $err) = Test::Simple::Catch::caught();
 local $ENV{HARNESS_ACTIVE} = 0;
 
+use Test::More tests => 2;
 use Test::JavaScript;
 
-plan(tests => 2);
-
-ok("diag('Hello World');", "Warn hello");
+js_ok("diag('Hello World');", "Warn hello");
 print $out->read;
 
 my $warn = $err->read;
 chomp $warn;
 
-is("\"$warn\"","# Hello World", "warned $warn");
+js_is("\"$warn\"","# Hello World", "warned $warn");
 print $out->read;

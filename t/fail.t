@@ -87,7 +87,7 @@ Test.prototype.test = function (arg) {
     return "arg=" + arg;
 }
 EOT
-pass(\&use_ok, $valid, "use $valid;");
+pass(\&js_eval_ok, $valid, "use $valid;");
 
 my $invalid = tempfile(<<EOT); 
 Bogus = function () {
@@ -96,7 +96,7 @@ Bogus = function () {
 
 Bogus.prototype = ;
 EOT
-pass(\&use_ok, $valid, "use $valid;");
+pass(\&js_eval_ok, $valid, "use $valid;");
 
 ##########
 #   ok   #
@@ -117,7 +117,7 @@ EOT
     string.split(" ");
 EOT
 );
-pass(\&ok, $_, comment($_)) for @passing;
+pass(\&js_ok, $_, comment($_)) for @passing;
 
 # Negative ok tests
 
@@ -125,27 +125,27 @@ my @failing = (
     "var 3 = 3;",
     "var array = ['one','two',noexist];",
 );
-fail(\&ok, $_, comment($_)) for @failing;
+fail(\&js_ok, $_, comment($_)) for @failing;
 
 ##########
 #   is   #
 ##########
 
-pass(\&ok, "var hw = 'Hello World'", "set hw to Hello World");
+pass(\&js_ok, "var hw = 'Hello World'", "set hw to Hello World");
 
-pass(\&is, "hw", "Hello World", "hw is 'Hello World'");
+pass(\&js_is, "hw", "Hello World", "hw is 'Hello World'");
 
-pass(\&ok, "var parts = hw.split(' ')", "split hw");
+pass(\&js_ok, "var parts = hw.split(' ')", "split hw");
 
-pass(\&is, "parts[0]", "Hello", "parts[0] is 'Hello'");
-pass(\&is, "parts[1]", "World", "parts[1] is 'World'");
-fail(\&is, "parts[2]", "Anything", "parts[2] is 'Anything'");
+pass(\&js_is, "parts[0]", "Hello", "parts[0] is 'Hello'");
+pass(\&js_is, "parts[1]", "World", "parts[1] is 'World'");
+fail(\&js_is, "parts[2]", "Anything", "parts[2] is 'Anything'");
 
-pass(\&ok, "var commad = parts.join(',')", "join with a comma");
-fail(\&is, "commad", "Hello;World", "commad = Hello;World");
-fail(\&is, "commad", "Hello.World", "commad = Hello.World");
-pass(\&is, "commad", "Hello,World", "commad = Hello,World");
+pass(\&js_ok, "var commad = parts.join(',')", "join with a comma");
+fail(\&js_is, "commad", "Hello;World", "commad = Hello;World");
+fail(\&js_is, "commad", "Hello.World", "commad = Hello.World");
+pass(\&js_is, "commad", "Hello,World", "commad = Hello,World");
 
-pass(\&isnt, "commad", "Hello;World", "commad = Hello;World");
-pass(\&isnt, "commad", "Hello.World", "commad = Hello.World");
-fail(\&isnt, "commad", "Hello,World", "commad = Hello,World");
+pass(\&js_isnt, "commad", "Hello;World", "commad = Hello;World");
+pass(\&js_isnt, "commad", "Hello.World", "commad = Hello.World");
+fail(\&js_isnt, "commad", "Hello,World", "commad = Hello,World");
