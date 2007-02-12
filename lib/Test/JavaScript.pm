@@ -38,7 +38,7 @@ our $js = JavaScript::SpiderMonkey->new();
 $js->init();
 END { $js->destroy };
 
-our $VERSION = 0.05;
+our $VERSION = 0.06;
 our @ISA     = qw(Exporter);
 our @EXPORT  = qw(js_ok js_eval_ok js_is js_isnt js_diag);
 
@@ -127,10 +127,10 @@ For example:
     js_is("3", 2, "3 is 2");				// not ok
 
     js_ok("function three () { return 3 }");		// ok
-    js_is("three()", 3);					// ok
-    js_is("three()", 4);					// not ok
+    js_is("three()", 3);				// ok
+    js_is("three()", 4);				// not ok
 
-    js_isnt("3", 4, "3 is not 4");				// ok
+    js_isnt("3", 4, "3 is not 4");			// ok
 
 =cut
 
@@ -186,15 +186,27 @@ EOT
     try_eval($code, $name);
 }
 
-=item B<js_diag>
+=item B<diag>
 
-  js_ok("js_diag('this is a warning from javascript')");
-  js_diag('this is a warning from perl');
+  js_ok("var myval = 3; diag('the variable myval is ' + myval)");
 
 This subroutine simply logs the parameters passed as a comment
 
 =cut
 
 $js->function_set("diag", sub { $Test->diag(@_) });
+
+=head1 AUTHORS
+
+Kevin Jones, C<< <kevinj at cpan.org> >>
+
+=head1 COPYRIGHT
+
+Copyright 2006 Kevin Jones, All Rights Reserved.
+
+This program is free software; you can redistribute it and/or modify it
+under the same terms as Perl itself.
+
+=cut
 
 return 1;
